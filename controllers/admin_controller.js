@@ -1,3 +1,5 @@
 module.exports.dashboard = function(req, res){
-    return res.end('<h1>Admin Dashboard!</h1>');
+    return res.render('admin', {
+        title: "Admin"
+    });
 }
