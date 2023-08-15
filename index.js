@@ -1,22 +1,27 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const port = 8000;
-
+const app = express();
 //accessing the database
 const db = require('./config/mongoose');
 
-const app = express();
+//middleware
+app.use(express.urlencoded());
+
+//cookie parser
+app.use(cookieParser());
+
+//setup static files
+app.use(express.static('./assets'));
 
 // use express router
-app.use('/', require('./routes/index'));
+app.use('/', require('./routes'));
 
 // setup the view engine ejs
 app.set('view engine', 'ejs');
 app.set('path', './views');
 
-// setup the static files
-app.use(express.urlencoded());
-app.use(express.static('assets'));
 
 app.listen(port, function(err){
     if(err){

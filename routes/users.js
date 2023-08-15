@@ -18,6 +18,8 @@ router.get('/signin', usersController.signin);
 router.post('/create', bodyParser.urlencoded(), usersController.create);
 
 //call the SignIn session
-router.get('/create-session', usersController.createSession);
+router.post('/create-session', bodyParser.urlencoded(), usersController.createSession);
+
+router.post('/signout', bodyParser.urlencoded(), usersController.signout);
 
 module.exports = router;

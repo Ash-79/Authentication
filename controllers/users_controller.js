@@ -1,9 +1,17 @@
 const User = require('../models/user');
 
-module.exports.profile = function(req, res){
-    return res.render('users', {
-        title: "Users"
-    });
+module.exports.profile = async function(req, res){
+    if(req.cookies.user_id){
+        let user = await User.findById(req.cookies.user_id).exec();
+        // console.log(user);
+        return res.render('user_profile',{
+            title: 'Profile',
+            name: user.name,
+            email: user.email
+        });
+    }
+    else
+        return res.redirect('signin');
 };
 
 module.exports.dashboard = function(req, res){
@@ -38,6 +46,33 @@ module.exports.create = async function(req, res){
 };
 
 //create the session
-module.exports.createSession = function(req, res){
-    //todo
+module.exports.createSession = async function(req, res){
+    //find the user
+    let user = await User.findOne({ email: req.body.email }).exec();
+
+    //user found
+    if(user){
+        //handle password mismatch
+        if(user.password != req.body.password){
+            console.log("passwprd Mismatch: "+ user.password +" : " +req.body.password);
+            return res.redirect('back');
+        }
+        //create session
+        else{
+            // console.log(user);
+            res.cookie('user_id', user.id);
+            console.log(req.cookie);
+            return res.redirect('./profile')
+        }
+    }
+    //user not found
+    else{
+        console.log("User not found");
+        return res.redirect('back');
+    }
+};
+
+module.exports.signout = function(req, res){
+    res.clearCookie('user_id');
+    return res.redirect('signin');
 };
