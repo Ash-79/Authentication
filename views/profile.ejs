@@ -8,8 +8,10 @@
     </title>
 </head>
 <body>
-    <h1>
-        <%= title %> - Accessed via ejs!
-    </h1>
+    <p><%= user.name%></p>
+    <p><%= user.email%></p>
+    <form action="/users/delete-session" method="post">
+        <button type="submit">Sign Out</button>
+    </form>
 </body>
 </html>
