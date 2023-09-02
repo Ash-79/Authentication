@@ -11,5 +11,18 @@
     <h1>
         <%= title %> - Accessed via ejs!
     </h1>
+    <h4>Post</h4>
+    <form id="new-post-form" action="/posts/create" method="post">
+        <textarea name="content" rows="5" cols="20" placeholder="Type here..."></textarea>
+        <button type="submit">Post</button>
+    </form>
+    <div>
+        <h4>Posts</h4>
+        <ul id="posts-list">
+            <% for(post of posts){ %>
+                <li> <%= post.content %> by <%= post.user.name %> </li>
+            <% } %>
+        </ul>
+    </div>
 </body>
 </html>

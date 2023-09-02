@@ -32,7 +32,7 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     cookie: {
-        maxAge: (1000 * 60 * 10)
+        maxAge: (1000 * 60 * 60)
     },
     store: MongoStore.create({
         mongoUrl:     'mongodb+srv://akashroynet:akashroy69@cluster0.nbgik9s.mongodb.net/Authentication',
