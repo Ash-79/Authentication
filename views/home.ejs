@@ -11,16 +11,42 @@
     <h1>
         <%= title %> - Accessed via ejs!
     </h1>
-    <h4>Post</h4>
-    <form id="new-post-form" action="/posts/create" method="post">
-        <textarea name="content" rows="5" cols="20" placeholder="Type here..."></textarea>
-        <button type="submit">Post</button>
-    </form>
+    <%if(locals.user){%>
+        <h4>Post</h4>
+        <form id="new-post-form" action="/posts/create" method="post">
+            <textarea name="content" rows="5" cols="20" placeholder="Type here..."></textarea>
+            <button type="submit">Post</button>
+        </form>
+    <% } %>
     <div>
         <h4>Posts</h4>
         <ul id="posts-list">
             <% for(post of posts){ %>
                 <li> <%= post.content %> by <%= post.user.name %> </li>
+                <div class="post-comments">
+                    <% if(locals.user){ %>
+                        <form action="/comment/create" method="post">
+                            <input type="text" name="content" placeholder="Comment here...">
+                            <input type="hidden" name="post" value="<%= post._id %>">
+                            <button type="submit">Add Comment</button>
+                        </form>
+                    <% } %>
+                    <div class="post-comments-list">
+                        <ul id="post-comments-<%= post._id %>">
+                            <% for(comment of post.comments){ %>
+                                <li>
+                                    <p>
+                                        <%= comment.content %>
+                                        <br>
+                                        <small>
+                                            <%= comment.user.name %>
+                                        </small>
+                                    </p>    
+                                </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
             <% } %>
         </ul>
     </div>
