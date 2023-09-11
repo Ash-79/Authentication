@@ -1,8 +1,10 @@
 const User = require('../models/user');
 
-module.exports.profile = function(req, res){
+module.exports.profile = async function(req, res){
+    const user = await User.findById(req.params.id);
     return res.render('profile', {
-        title: "Profile"
+        title: "Profile",
+        profile_user: user
     });
 };
 
@@ -44,8 +46,10 @@ module.exports.create = async function(req, res){
 };
 
 //create the session
-module.exports.createSession = function(req, res){
-    return res.redirect('./profile');
+module.exports.createSession = async function(req, res){
+    
+    let logged_user = await User.findOne({email: req.body.email});
+    return res.redirect('./profile/'+logged_user.id);
 };
 
 module.exports.deleteSession = function(req, res){
