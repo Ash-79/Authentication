@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 
 module.exports.profile = async function(req, res){
     const user = await User.findById(req.params.id);
@@ -44,6 +46,30 @@ module.exports.create = async function(req, res){
     await User.create(req.body);
     return res.redirect('./signin');
 };
+
+//update user details
+module.exports.update = async function(req, res){
+    if(req.user.id.toString() == req.params.id.toString()){
+        let user = await User.findById(req.params.id);
+        User.uploadedAvatar(req, res, function(err){
+            if(err)
+                console.log('***Multer Error: ', err);
+            user.name = req.body.name;
+            user.email = req.body.email;
+
+            if(req.file){
+                //remove the previous avatar of the user
+                if(user.avatar){
+                    fs.unlinkSync(path.join(__dirname, '..', user.avatar));
+                }
+
+                user.avatar = User.avatarPath +'/'+ req.file.filename;
+            }
+            user.save();
+        });
+    }
+    return res.redirect('/');
+}
 
 //create the session
 module.exports.createSession = async function(req, res){
