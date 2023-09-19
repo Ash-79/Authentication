@@ -24,6 +24,10 @@ router.post('/create-session', passport.authenticate(
     {failureRedirect: '/users/signin'},
 ),usersController.createSession);
 
+//gooleAuth
+router.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
+router.get('/auth/google/callback', passport.authenticate('google', {failureRedirect: '/users/signin'}), usersController.createSession);
+
 //delete session
 router.post('/delete-session', usersController.deleteSession);
 
